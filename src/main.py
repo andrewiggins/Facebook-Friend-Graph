@@ -27,6 +27,13 @@
 This module has the user login into Facebook to get his or her access token (as
 defined in the module accesstoken.py) and uses that access token to graph the
 friends of the user and the connections between them.
+
+Usage:
+    $python main.py
+        No command line agruments. This module gets the users access_token
+        (as defined in accesstoken.py) by using the Friends Graph
+        (a Facebook App) App ID. Then uses fb_friend_graph.py to graph the users
+        friends and the friendships between them.
 """
 
 import sys

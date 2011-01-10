@@ -30,6 +30,18 @@ access token is passed into the method graph_mutual_friends.
 This module is designed to create a graph of the facebook friends of
 a user and the connections between each of the friends. This graph can then be
 written to a GraphML file so further analysis and processing may be preformed.
+
+Usage:
+Top-Level:
+    $python fb_friend_graph.py access_token
+        where access_token is the user's access_token giving you access to their
+        basic information and friends list.
+
+On Import:
+    graph_mutual_friends(access_token)
+        this is the meat of the module. It writes a GraphML file representing
+        all the friends of the user whose access_token is passed in and the
+        frienships between them.
 """
 
 from urllib import quote

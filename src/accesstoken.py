@@ -26,6 +26,18 @@
 
 This module is used to determine a user's Facebook Access Token given a Facebook
 App ID (or Client ID).
+
+Usage:
+Top-Level:
+    $python accesstoken.py app_id
+        where app_id is the Facebook Application ID that authorizes you to
+        request information from Facebook Users. The access_token is printed.
+
+On Import:
+    get_access_token(app_id):
+        This is the meat of this module. It opens a web browser with the
+        Facebook login screen. Once the user logs in, the function extracts the
+        access_token from the url and returns it
 """
 
 import sys
@@ -87,7 +99,8 @@ class AccessTokenRequestHandler(BaseHTTPRequestHandler):
 
 def get_access_token(app_id):
     """Returns the access token of a Facebook user. The app_id is the App ID of
-    a Facebook Application that is requesting the users access_token"""
+    a Facebook Application that is requesting the users access_token
+    """
     login_url = "https://graph.facebook.com/oauth/authorize?client_id=%s&redirect_uri=http://localhost:8008/&type=user_agent&display=popup" % app_id
 
     server_address = ('', 8008)

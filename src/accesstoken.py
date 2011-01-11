@@ -88,7 +88,8 @@ class AccessTokenRequestHandler(BaseHTTPRequestHandler):
             else:
                 self.server.error = query.get('error_reason', ['unknown error: %s' % str(query)])[0]
                 if self.server.error == 'user_denied':
-                    self.wfile.write(html % ('Error', 'You must login to Facebook for the software to work.'))
+                    self.wfile.write(html % ('Error', 'You must login to Facebook for the software to work.<br/>' +
+                        'This software does not store any usernames or passwords.'))
                 else:
                     self.wfile.write(html % ('Error', 'Sorry! An error has occured. Please try again.'))
         else:

@@ -47,9 +47,9 @@ def main():
     try:
         access_token = get_access_token(app_id)
     except:
-        sys.exit(1)
-
-    graph_mutual_friends(access_token)
+        pass
+    else:
+        graph_mutual_friends(access_token)
 
 
 if __name__ == '__main__':

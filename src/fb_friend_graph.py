@@ -107,7 +107,11 @@ class MutualFriendGraphMLFile(object):
         """Writes a list of friends and their connections to the user and
         other nodes"""
         for friend1_id in friends:
-            self.writeComment(u"%s" % escape(self.names[friend1_id]))
+            try:
+                self.writeComment(u"%s" % escape(self.names[friend1_id]))
+            except:
+                pass
+
             self.addFriendEdge(self.user['id'], friend1_id)
 
             for friend2_id in friends[friend1_id]:
@@ -165,11 +169,15 @@ def load_write_directory(name):
     """Returns the directory the files are to be created in and creates it if
     necessary.
     """
-    directory = "FacebookData/%s/" % name
+    directory = "FacebookData"
     if (not os.path.exists(directory)):
         os.mkdir(directory)
 
-    return directory
+    directory += "/%s" % name
+    if (not os.path.exists(directory)):
+        os.mkdir(directory)
+
+    return directory + "/"
 
 
 def write_mutual_friends(filename, me, my_friends, my_mutual_friends):
@@ -223,7 +231,7 @@ def graph_mutual_friends(access_token):
                 try:
                     print '%s/%s: %s(%s) mutual friends have already been loaded' % (count + 1,len(my_friends), my_friend['name'], my_friend['id'])
                 except:
-                    print str(my_friend['id']) + ' will not print! :(' #1087500527
+                    print str(my_friend['id']) + ' will not print! :('
     except Exception as e:
         traceback.print_exc()
     finally:

@@ -37,6 +37,7 @@ Usage:
 """
 
 import sys
+import traceback
 
 from accesstoken import get_access_token
 from fb_friend_graph import graph_mutual_friends
@@ -45,9 +46,10 @@ from fb_friend_graph import graph_mutual_friends
 def main():
     app_id = 183750651654082
     try:
+        print "Opening Facebook. Please login to facebook."
         access_token = get_access_token(app_id)
     except:
-        pass
+        traceback.print_exc()
     else:
         graph_mutual_friends(access_token)
 

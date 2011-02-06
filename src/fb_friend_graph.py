@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 #-------------------------------------------------------------------------------
 # Name:        fb_friend_graph.py
-# Purpose:     Writes a graphml file
+# Purpose:     Writes a graphml file. See description below.
 #
 # Author:      Andre Wiggins
 #
 # Created:     21/12/2010
 # Copyright:   (c) Andre Wiggins 2010
-# Licence:
+# License:
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -24,12 +24,12 @@
 
 """Facebook Friend Graph
 
-All methods and terminology refers to the facebook friends of the user whose
+All methods and terminology refers to the Facebook friends of the user whose
 access token is passed into the method graph_mutual_friends.
 
-This module is designed to create a graph of the facebook friends of
+This module is designed to create a graph of the Facebook friends of
 a user and the connections between each of the friends. This graph can then be
-written to a GraphML file so further analysis and processing may be preformed.
+written to a GraphML file so further analysis and processing may be performed.
 
 Usage:
 Top-Level:
@@ -41,7 +41,7 @@ On Import:
     graph_mutual_friends(access_token)
         this is the meat of the module. It writes a GraphML file representing
         all the friends of the user whose access_token is passed in and the
-        frienships between them.
+        friendships between them.
 """
 
 from urllib import quote
@@ -49,7 +49,6 @@ from xml.sax.saxutils import escape
 
 import sys
 import json
-import time
 import codecs
 import pickle
 import os.path
@@ -92,7 +91,7 @@ class MutualFriendGraphMLFile(object):
 
 
     def addFriendNodes(self, friends):
-        """Writes a list of friend noes to the file"""
+        """Writes a list of friend nodes to the file"""
         for friend in friends:
             self.addFriendNode(friend['id'], friend['name'])
 
@@ -134,7 +133,7 @@ class MutualFriendGraphMLFile(object):
 
 
 def get_mutual_friends(source_uid, target_uid, access_token):
-    """Gets the mutual friends of the tow user ids using the passed
+    """Gets the mutual friends of the two user ids using the passed
     in access_token
     """
     url = 'https://api.facebook.com/method/friends.getMutualFriends?source_uid=%s&target_uid=%s&access_token=%s&format=json'
@@ -232,7 +231,7 @@ def graph_mutual_friends(access_token):
                     print '%s/%s: %s(%s) mutual friends have already been loaded' % (count + 1,len(my_friends), my_friend['name'], my_friend['id'])
                 except:
                     print str(my_friend['id']) + ' will not print! :('
-    except Exception as e:
+    except Exception:
         traceback.print_exc()
     finally:
         print 'Have mutual friends for %s out of %s friends' %(len(my_mutual_friends), len(my_friends))
@@ -249,7 +248,7 @@ def graph_mutual_friends(access_token):
 
 def main():
     """runs graph_mutual_friends() on the access_token passed in as a command
-    line agrument
+    line argument
     """
     if len(sys.argv) > 1:
         access_token = sys.argv[1]

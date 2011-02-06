@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 #-------------------------------------------------------------------------------
 # Name:        main.py
-# Purpose:
+# Purpose:     Main file to create the Facebook graphml file outlined below.
 #
 # Author:      Andre Wiggins
 #
 # Created:     03/01/2011
 # Copyright:   (c) Andre Wiggins 2011
-# Licence:
+# License:
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -30,13 +30,12 @@ friends of the user and the connections between them.
 
 Usage:
     $python main.py
-        No command line agruments. This module gets the users access_token
+        No command line arguments. This module gets the users access_token
         (as defined in accesstoken.py) by using the Friends Graph
         (a Facebook App) App ID. Then uses fb_friend_graph.py to graph the users
         friends and the friendships between them.
 """
 
-import sys
 import traceback
 
 from accesstoken import get_access_token
@@ -46,7 +45,7 @@ from fb_friend_graph import graph_mutual_friends
 def main():
     app_id = 183750651654082
     try:
-        print "Opening Facebook. Please login to facebook."
+        print "Opening Facebook. Please login to Facebook."
         access_token = get_access_token(app_id)
     except:
         traceback.print_exc()

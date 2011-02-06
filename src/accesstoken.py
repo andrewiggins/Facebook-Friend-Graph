@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 #-------------------------------------------------------------------------------
 # Name:        accesstoken.py
-# Purpose:
+# Purpose:     User logs into Facebook to get their access token
 #
 # Author:      Andre Wiggins
 #
 # Created:     04/01/2011
 # Copyright:   (c) Andre Wiggins 2011
-# Licence:
+# License:
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -37,19 +37,22 @@ On Import:
     get_access_token(app_id):
         This is the meat of this module. It opens a web browser with the
         Facebook login screen. Once the user logs in, the function extracts the
-        access_token from the url and returns it
+        access_token from the URL and returns it
 """
+
 
 import sys
 import urlparse
 import webbrowser
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 
+
 javascript_redirect = '''<script type="text/javascript">
 var url = window.location.href.toString()
 window.location = url.replace("#", "?")
 </script>
 '''
+
 
 html = '''<html>
 <head>
@@ -62,6 +65,7 @@ html = '''<html>
 
 </html>
 '''
+
 
 class AccessTokenRequestHandler(BaseHTTPRequestHandler):
     """This class handles the request that the Facebook OAuth API will send once
@@ -89,9 +93,9 @@ class AccessTokenRequestHandler(BaseHTTPRequestHandler):
                 self.server.error = query.get('error_reason', ['unknown error: %s' % str(query)])[0]
                 if self.server.error == 'user_denied':
                     self.wfile.write(html % ('Error', 'You must login to Facebook for the software to work.<br/>' +
-                        'This software does not store any usernames or passwords.'))
+                        'This software does not store any user names or passwords.'))
                 else:
-                    self.wfile.write(html % ('Error', 'Sorry! An error has occured. Please try again.'))
+                    self.wfile.write(html % ('Error', 'Sorry! An error has occurred. Please try again.'))
         else:
             self.wfile.write(html % ('Redirect', javascript_redirect))
 
@@ -117,9 +121,10 @@ def get_access_token(app_id):
     else:
         return httpd.access_token
 
+
 def main():
     """Prints the access_token of the user using the App ID passed in as the
-    first command line agrument
+    first command line argument
     """
     if len(sys.argv) > 1:
         app_id = sys.argv[1]
@@ -130,8 +135,6 @@ def main():
         print access_token
     else:
         print 'Please pass in the access_token of the user to use.'
-
-
 
 
 if __name__ == '__main__':

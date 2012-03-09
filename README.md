@@ -39,7 +39,7 @@ Requirements
 
 3. [Gephi](http://www.gephi.org) (*optional*)
 
-    - The program the [presentation][1] uses to create a graph from the [GraphML][2] 
+    - Gephi is the program the [presentation][1] uses to create a graph from the [GraphML][2] 
     file this software creates. Not required to run this software.
 
 ---

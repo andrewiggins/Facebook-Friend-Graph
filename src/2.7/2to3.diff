@@ -1,0 +1,202 @@
+--- accesstoken.py	(original)
++++ accesstoken.py	(refactored)
+@@ -42,9 +42,9 @@
+ 
+ 
+ import sys
+-import urlparse
++import urllib.parse
+ import webbrowser
+-from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
++from http.server import HTTPServer, BaseHTTPRequestHandler
+ 
+ 
+ javascript_redirect = '''<script type="text/javascript">
+@@ -85,8 +85,8 @@
+         self.server.error = ""
+ 
+         if '?' in self.path:
+-            query = urlparse.parse_qs(urlparse.urlparse(self.path)[4])
+-            if query.has_key('access_token'):
++            query = urllib.parse.parse_qs(urllib.parse.urlparse(self.path)[4])
++            if 'access_token' in query:
+                 self.server.access_token = query['access_token'][0]
+                 self.wfile.write(html % ('Thank You!', 'You may now close your browser.'))
+             else:
+@@ -132,9 +132,9 @@
+             access_token = get_access_token(app_id)
+         except:
+             sys.exit(1)
+-        print access_token
++        print(access_token)
+     else:
+-        print 'Please pass in the access_token of the user to use.'
++        print('Please pass in the access_token of the user to use.')
+ 
+ 
+ if __name__ == '__main__':
+--- facebook.py	(original)
++++ facebook.py	(refactored)
+@@ -36,7 +36,7 @@
+ import cgi
+ import hashlib
+ import time
+-import urllib
++import urllib.request, urllib.parse, urllib.error
+ 
+ # Find a JSON parser
+ try:
+@@ -167,9 +167,9 @@
+                 post_args["access_token"] = self.access_token
+             else:
+                 args["access_token"] = self.access_token
+-        post_data = None if post_args is None else urllib.urlencode(post_args)
+-        file = urllib.urlopen("https://graph.facebook.com/" + path + "?" +
+-                              urllib.urlencode(args), post_data)
++        post_data = None if post_args is None else urllib.parse.urlencode(post_args)
++        file = urllib.request.urlopen("https://graph.facebook.com/" + path + "?" +
++                              urllib.parse.urlencode(args), post_data)
+         try:
+             response = _parse_json(file.read())
+         finally:
+@@ -203,7 +203,7 @@
+     """
+     cookie = cookies.get("fbs_" + app_id, "")
+     if not cookie: return None
+-    args = dict((k, v[-1]) for k, v in cgi.parse_qs(cookie.strip('"')).items())
++    args = dict((k, v[-1]) for k, v in list(cgi.parse_qs(cookie.strip('"')).items()))
+     payload = "".join(k + "=" + args[k] for k in sorted(args.keys())
+                       if k != "sig")
+     sig = hashlib.md5(payload + app_secret).hexdigest()
+--- fb_friend_graph.py	(original)
++++ fb_friend_graph.py	(refactored)
+@@ -44,7 +44,7 @@
+         friendships between them.
+ """
+ 
+-from urllib import quote
++from urllib.parse import quote
+ from xml.sax.saxutils import escape
+ 
+ import sys
+@@ -52,7 +52,7 @@
+ import codecs
+ import pickle
+ import os.path
+-import urllib2
++import urllib.request, urllib.error, urllib.parse
+ import facebook
+ import traceback
+ 
+@@ -99,7 +99,7 @@
+     def addFriendEdge(self, source_id, target_id):
+         """Writes a connection (edge) between to friends"""
+         edge_id = str(source_id) + '->' + str(target_id)
+-        return self.gfile.write(u'<edge id="edge%s" source="friend%s" target="friend%s" />\n' % (edge_id, source_id, target_id))
++        return self.gfile.write('<edge id="edge%s" source="friend%s" target="friend%s" />\n' % (edge_id, source_id, target_id))
+ 
+ 
+     def addFriendEdges(self, friends):
+@@ -107,7 +107,7 @@
+         other nodes"""
+         for friend1_id in friends:
+             try:
+-                self.writeComment(u"%s" % escape(self.names[friend1_id]))
++                self.writeComment("%s" % escape(self.names[friend1_id]))
+             except:
+                 pass
+ 
+@@ -140,9 +140,9 @@
+     t = (quote(s) for s in [source_uid, target_uid, access_token])
+     url = url % tuple(t)
+ 
+-    req = urllib2.Request(url)
+-
+-    return json.loads(urllib2.urlopen(req).read())
++    req = urllib.request.Request(url)
++
++    return json.loads(urllib.request.urlopen(req).read())
+ 
+ 
+ def load_mutual_friends(directory, user):
+@@ -205,11 +205,11 @@
+     GraphML file and the connections between each of those friends and writes
+     them to a GraphML file.
+     """
+-    print 'Access Token: %s' % access_token
++    print('Access Token: %s' % access_token)
+     graph = facebook.GraphAPI(access_token)
+ 
+     me = graph.get_object('me')
+-    print 'Retrieving my (%s(%s)) friends...' % (me['name'], me['id'])
++    print('Retrieving my (%s(%s)) friends...' % (me['name'], me['id']))
+     my_friends = graph.get_connections(me['id'], 'friends')["data"]
+ 
+     directory = load_write_directory(me['name'])
+@@ -217,33 +217,33 @@
+     my_mutual_friends = remove_old_friends(my_friends, load_mutual_friends(directory, me))
+ 
+     try:
+-        print
+-        for my_friend, count in zip(my_friends, xrange(len(my_friends))):
+-            if not my_mutual_friends.has_key(my_friend['id']):
++        print()
++        for my_friend, count in zip(my_friends, range(len(my_friends))):
++            if my_friend['id'] not in my_mutual_friends:
+                 try:
+-                    print '%s/%s: Retrieving mutual friends of %s(%s)...' % (count + 1, len(my_friends), my_friend['name'], my_friend['id'])
++                    print('%s/%s: Retrieving mutual friends of %s(%s)...' % (count + 1, len(my_friends), my_friend['name'], my_friend['id']))
+                 except:
+-                    print str(my_friend['id']) + ' will not print! :('
++                    print(str(my_friend['id']) + ' will not print! :(')
+ 
+                 my_mutual_friends[my_friend['id']] = get_mutual_friends(me['id'], my_friend['id'], access_token)
+             else:
+                 try:
+-                    print '%s/%s: %s(%s) mutual friends have already been loaded' % (count + 1,len(my_friends), my_friend['name'], my_friend['id'])
++                    print('%s/%s: %s(%s) mutual friends have already been loaded' % (count + 1,len(my_friends), my_friend['name'], my_friend['id']))
+                 except:
+-                    print str(my_friend['id']) + ' will not print! :('
++                    print(str(my_friend['id']) + ' will not print! :(')
+     except Exception:
+         traceback.print_exc()
+     finally:
+-        print 'Have mutual friends for %s out of %s friends' %(len(my_mutual_friends), len(my_friends))
+-        print
+-        print "Creating files in  %s" % os.path.join(os.path.abspath(os.curdir), directory)
+-        print 'Writing mutual friends to file...'
++        print('Have mutual friends for %s out of %s friends' %(len(my_mutual_friends), len(my_friends)))
++        print()
++        print("Creating files in  %s" % os.path.join(os.path.abspath(os.curdir), directory))
++        print('Writing mutual friends to file...')
+         pickle_mutual_friends(directory, me, my_mutual_friends)
+ 
+         filename = directory + "%s(%s).graphml" % (me['name'], me['id'])
+-        print 'Writing %s...' % filename
++        print('Writing %s...' % filename)
+         write_mutual_friends(filename, me, my_friends, my_mutual_friends)
+-        print 'Done!'
++        print('Done!')
+ 
+ 
+ def main():
+@@ -254,7 +254,7 @@
+         access_token = sys.argv[1]
+         graph_mutual_friends(access_token)
+     else:
+-        print 'Please pass in the access_token of the user to use.'
++        print('Please pass in the access_token of the user to use.')
+ 
+ 
+ if __name__ == '__main__':
+--- main.py	(original)
++++ main.py	(refactored)
+@@ -45,7 +45,7 @@
+ def main():
+     app_id = 183750651654082
+     try:
+-        print "Opening Facebook. Please login to Facebook."
++        print("Opening Facebook. Please login to Facebook.")
+         access_token = get_access_token(app_id)
+     except:
+         traceback.print_exc()

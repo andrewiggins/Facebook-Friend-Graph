@@ -22,7 +22,7 @@ you will get a graph like the one in the [presentation][1].
 Requirements
 ============
 
-1. [Python](http://www.python.org/):
+1. [Python 2.7](http://www.python.org/):
 
     - The programming language this software is written in. Download it and run 
     this software by executing `python main.py` in a terminal. Or, if you are 
@@ -39,7 +39,7 @@ Requirements
 
 3. [Gephi](http://www.gephi.org) (*optional*)
 
-    - The program the [presentation][1] uses to create a graph from the [GraphML][2] 
+    - Gephi is the program the [presentation][1] uses to create a graph from the [GraphML][2] 
     file this software creates. Not required to run this software.
 
 ---

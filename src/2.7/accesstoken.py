@@ -134,7 +134,7 @@ def main():
             sys.exit(1)
         print access_token
     else:
-        print 'Please pass in the access_token of the user to use.'
+        print "Please pass in the app id to use to request the user's access token."
 
 
 if __name__ == '__main__':

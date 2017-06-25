@@ -1,0 +1,142 @@
+{
+    /*
+    * Possible values:
+    * - the name of a built-in config
+    * - the name of an NPM module which has a "main" file that exports a config object
+    * - a relative path to a JSON file
+    */
+    "extends": "tslint:latest",
+    "rules": {
+        /*
+        * Any rules specified here will override those from the base config we are extending.
+        */
+
+        /*
+         * TypeScript specific
+         */
+        // Enforces member ordering.
+        // Rationale: A consistent ordering for class members can make classes easier to read, navigate, and edit.
+        // TODO - discuss
+        "member-ordering": [
+            false,
+            {
+                "order": "statics-first"
+            }
+        ],
+        // Disallows explicit type declarations for variables or parameters initialized to a number, string, or boolean.
+        // Rationale: Explicit types where they can be easily infered by the compiler make code more verbose.
+        // Example: public key1 = 1; private key2 = "string";
+        "no-inferrable-types": [ true, "ignore-params", "ignore-properties"],
+        // Disallows use of internal modules and namespaces.
+        // Override. Rationale: We use namespaces currently
+        "no-namespace": false,
+        // Disallows /// <reference path=> imports (use ES6-style imports instead).
+        // Override. Rationale: We use references currently
+        "no-reference": false,
+        // Disallows traditional (non-arrow) function expressions.
+        // Override. Rationale: Sometimes a full function is desired
+        "only-arrow-functions": [ false ],
+        // Recommends a ‘for-of’ loop over a standard ‘for’ loop if the index is only used to access the
+        // array being iterated.
+        // Rationale: A for(… of …) loop is easier to implement and read when the index is not needed.
+        // TODO - discuss
+        "prefer-for-of": true,
+        // Requires type definitions to exist.
+        // Rationale: Makes refactoring easier if expected contract is explicit
+        "typedef": [ true, "call-signature", "parameter", "member-variable-declaration" ],
+
+
+        /*
+         * Functionality
+         */
+        // All default rules are fine
+
+
+        /*
+         * Maintainability
+         */
+        // Enforces a consistent linebreak style.
+        "linebreak-style": [ true, "CRLF" ],
+        // A file may not contain more than the specified number of classes
+        // Override. Rationale: We include multiple angular related classes in one file
+        "max-classes-per-file": [ false ],
+        // Requires lines to be under a certain max length.
+        // Rationale: Limiting the length of a line of code improves code readability. It also makes comparing code
+        // side-by-side easier and improves compatibility with various editors, IDEs, and diff viewers.
+        // Override. Increased to 140.
+        "max-line-length": [ 140 ],
+        // Requires that variable declarations use const instead of let if possible.
+        // Override. Rationale: We choose to use const to imply deliberate intention, not coincidental usage
+        "prefer-const": false,
+
+
+        /*
+         * Style
+         */
+        // Requires using either ‘T[]’ or ‘Array' for arrays. "array-simple" enforces use of T[] if T is
+        // a simple type (primitive or type reference).
+        // Rationale: With complex types it can be difficult to parse out the "[]" in the typedef. Example:
+        // { key1: string, key2: string }[] vs Array<{ key1: string, key2: string }>
+        // TODO - discuss
+        "array-type": [ true, "array-simple" ],
+        // Requires parentheses around the parameters of arrow function definitions.
+        // Rationale: Maintains stylistic consistency with other arrow function definitions.
+        // Extra rationale: Simplify the syntactical complexity of one arg arrow functions
+        "arrow-parens": [ true, "ban-single-arg-parens" ],
+        // Enforces documentation for important items be filled out.
+        // Rationale: Document the purpose of the classes in the project
+        // TODO - discuss
+        //"completed-docs": [true],
+        // Requires interface names to begin with a capital ‘I’
+        // Rationale: Makes it easy to differentitate interfaces from regular classes at a glance.
+        // TODO - discuss
+        "interface-name": [ false ],
+        // Disallows one or more blank lines in a row.
+        // Override. Rationale: Using multiple blank lines can be useful to better section code
+        "no-consecutive-blank-lines": [ false ],
+        // Requires keys in object literals to be sorted alphabetically
+        // Override. Rationale: Sort object keys by importance
+        // TODO - discuss
+        "object-literal-sort-keys": false,
+        // Requires the specified tokens to be on the same line as the expression preceding them.
+        // Override. Rationale: Prefer Stroustrup style, similarly to the TypeScript coding guidelines
+        // (at the bottom): https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines
+        "one-line": [ false ],
+        // Require or disallow a space before function parenthesis
+        // Override. Rationale: There should always be a space after the `function` keyword but not after
+        // the name of the function. Anonymous functions should have a space between function and the opening
+        // paren.
+        "space-before-function-paren": [
+            true,
+            {
+                "anonymous": "always",
+                "asyncArrow": "always",
+                "constructor": "never",
+                "method": "never",
+                "named": "never"
+            }
+        ],
+        // Checks variable names for various errors.
+        // Override. Rationale: Allow leading underscore for use with getters and setters. For example,
+        // if you have a getter/setter named `isVisible`, you could use a private `_isVisible` variable
+        // to track state changes
+        "variable-name": [
+            true,
+            "ban-keywords",
+            "check-format",
+            "allow-pascal-case",
+            "allow-leading-underscore"
+        ]
+    },
+    "jsRules": {
+        /*
+        * Any rules specified here will override those from the base config we are extending.
+        */
+    },
+    "rulesDirectory": [
+        /*
+         * A list of relative or absolute paths to directories that contain custom rules.
+         * See the Custom Rules documentation below for more details.
+         */
+    ]
+}

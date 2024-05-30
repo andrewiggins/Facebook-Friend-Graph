@@ -53,10 +53,5 @@ No command line arguments are available.
 
 ---
 
-Author
-======
-
-Andre Wiggins (drewigg@gmail.com)
-
 [1]: http://www.slideshare.net/sociomantic/facebook-network-analysis-using-gephi-3996673 "Facebook Network Analysis Using Gephi"
 [2]: http://graphml.graphdrawing.org/ "GraphML"
